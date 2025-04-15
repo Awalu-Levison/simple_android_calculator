@@ -13,38 +13,38 @@ class CalculatorLayout(BoxLayout):
         self.history_manager = History_Manager()
 
     def calc_symbol(self, symbol):
-        self.calc_field.text += symbol
+        self.ids.calc_field.text += symbol
     
     def backspace(self):
         """Clear the screen"""
-        self.calc_field.text = self.calc_field.text[:-1]
+        self.ids.calc_field.text = self.ids.calc_field.text[:-1]
 
     def get_result(self):
         """Get result of an operation"""
-        expression = self.calc_field.text
+        expression = self.ids.calc_field.text
         result = evaluate_expression(expression)
-        self.calc_field.text = result
+        self.ids.calc_field.text = result
         self.history_manager.add_entry(f"{expression} = {result}")
         self.update_history_display()
 
     def square(self):
         """Find the square of the number"""
-        self.calc_field.text = square(self.calc_field.text)
-        self.history_manager.add_entry(f"{self.calc_field.text}2")
+        self.ids.calc_field.text = square(self.ids.calc_field.text)
+        self.history_manager.add_entry(f"{self.ids.calc_field.text}2")
 
     def square_root(self):
         """Find square root of a number"""
-        self.calc_field.text = square_root(self.calc_field.text)
-        self.history_manager.add_entry(f"√{self.calc_field.text}")
+        self.ids.calc_field.text = square_root(self.ids.calc_field.text)
+        self.history_manager.add_entry(f"√{self.ids.calc_field.text}")
 
     def percentage(self):
         """Calculate percentage of a number"""
-        self.calc_field.text = percentage(self.calc_field.text)
-        self.history_manager.add_entry(f"{self.calc_field.text}%")
+        self.ids.calc_field.text = percentage(self.ids.calc_field.text)
+        self.history_manager.add_entry(f"{self.ids.calc_field.text}%")
 
     def clear(self):
         """Clear the screen"""
-        self.calc_field.text = ""
+        self.ids.calc_field.text = ""
     
     def update_history_display(self):
         """Update user data to history list"""
