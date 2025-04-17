@@ -56,4 +56,5 @@ class FocusCalc(App):
         return CalculatorLayout()
     
 if __name__ == "__main__":
-    FocusCalc().run()
+    MyCalculator = FocusCalc(App)
+    MyCalculator().run()
