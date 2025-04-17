@@ -50,4 +50,4 @@ def evaluate_expression(expression):
     except ZeroDivisionError:
         return "Error: Division by 0"
     except Exception as e:
-        return "Error: {str(e)}"
+        return f"Error: {str(e)}"
