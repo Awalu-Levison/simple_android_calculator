@@ -1,26 +1,29 @@
 import math
 
 
-def square(number):
+def square(self):
     # Allow square calculations
-    try:
-        return str(float(number) ** 2)
-    except Exception:
-        return "Error"
+    value = self.ids.calc_field.text
+    result = square(value)
+    self.ids.calc_field.text = result
+    self.history_manager.add_entry(f"{value}2 = {result}")
+    self.update_history_display()
 
 
-def square_root(number):
+def square_root(self):
     # calculate square root of numbers
-    try:
-        num = float(number)
-        return str(math.sqrt(num) if num >= 0 else "Error: √(-)")
-    except Exception:
-        return "Error"
+    value = self.ids.calc_field.text
+    result = square_root(value)
+    self.ids.calc_field.text = result
+    self.history_manager.add_entry(f"√{value} = {result}")
+    self.update_history_display()
+
 
 
 def percentage(number):
     # Convert numbers to percenbtage
-    try:
-        return str(float(number) / 100)
-    except Exception:
-        return "Error"
+    value = self.ids.calc_field.text # type: ignore
+    result = percentage(value)
+    self.ids.calc_field.text = result # type: ignore
+    self.history_manager.add_entry(f"{value}% = {result}") # type: ignore
+    self.update_history_display() # type: ignore
