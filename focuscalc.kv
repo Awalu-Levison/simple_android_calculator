@@ -3,24 +3,24 @@
     spacing: 10
     padding: 10
 
-    BoxLayout:
-        size_hint_y: None
-        height: '80dp'
-        TextInput:
-            id: calc_field
-            font_size: 32
-            multiline: False
-            readonly: True
-            halign: 'right'
-            valign: 'middle'
-            text: ''
-        on_text: root.calc_field = calc_field
+    # Display area
+    TextInput:
+        id: calc_field
+        font_size: 32
+        multiline: False
+        readonly: True
+        halign: 'right'
+        valign: 'middle'
+        size_hint_y: 0.15
+        text: ''
 
+    # Buttons area
     GridLayout:
         cols: 4
         spacing: 5
-        size_hint_y: None
-        height: self.minimum_height
+        size_hint_y: 0.65
+        row_default_height: '60dp'
+        row_force_default: True
 
         Button:
             text: '7'
@@ -60,7 +60,7 @@
         Button:
             text: '*'
             on_press: root.calc_symbol('*')
-
+        
         Button:
             text: '0'
             on_press: root.calc_symbol('0')
@@ -91,14 +91,20 @@
             text: 'x²'
             on_press: root.square()
             size_hint_x: 1
-            colspan: 4
+            size_hint_y: None
+            height: '60dp'
+    
+    # history area
+    ScrollView:
+        size_hint_y: 0.2
+        do_scroll_x: False
 
-    Label:
-        id: history_label
-        size_hint_y: None
-        height: '100dp'
-        text_size: self.size
-        valign: 'top'
-        halign: 'left'
-        font_size: 14
-        text: ''
+        Label:
+            id: history_label
+            text_size: self.width, None
+            size_hint_y: None
+            height: self.texture_size[1]
+            valign: 'top'
+            halign: 'left'
+            font_size: 14
+            text: ''
