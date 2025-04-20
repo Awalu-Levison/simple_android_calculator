@@ -1,10 +1,7 @@
-from collections import deque
-
-
 class History_Manager:
     """Manage calculation history"""
     def __init__(self):
-        self.history = deque(maxlen=5)
+        self.history = []
     
     def add_entry(self, entry):
         """Add history entry to the array"""
