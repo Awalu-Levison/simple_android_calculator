@@ -3,6 +3,7 @@ from kivy.uix.boxlayout import BoxLayout
 from operations.arithmetic import evaluate_expression
 from operations.advanced import square, square_root, percentage
 from operations.history import History_Manager
+from operations.advanced import square_root, percentage 
 
 import kivy
 
@@ -55,6 +56,6 @@ class FocusCalc(App):
     def build(self):
         return CalculatorLayout()
     
-if __name__ == "__main__":
-    MyCalculator = FocusCalc(App)
-    MyCalculator().run()
+if __name__ == '__main__':
+    MyCalculator = FocusCalc()
+    MyCalculator.run()
