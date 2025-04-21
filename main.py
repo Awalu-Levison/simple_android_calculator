@@ -28,10 +28,31 @@ class CalculatorLayout(BoxLayout):
     def get_result(self):
         """Get result of an operation"""
         expression = self.ids.calc_field.text
-        result = evaluate_expression(expression)
-        self.ids.calc_field.text = result
-        self.history_manager.add_entry(f"{expression} = {result}")
+
+        # Check exponentiation mode
+        if self.exponent_mode and "^" in expression:
+            try:
+                base, exponent = expression.split("^")
+                result = exponentiate(base, exponent)
+                self.ids.calc_field.text = result
+                self.history_manager.add_entry(f"{base}^{exponent} = {result}")
+            except Exception as e:
+                self.ids.calc_field.text = "Error"
+            finally:
+                self.exponent_mode = False
+                self.exponent_base = ""
+                self.update_history_display()
+                return
+            
+        # Fallback: normal evaluation
+        try:
+            result = str(eval(expression))
+            self.ids.calc_field.text = result
+            self.history_manager.add_entry(f"{expression} = {result}")
+        except Exception:
+            self.ids.calc_field.text = "Error"
         self.update_history_display()
+
 
     def square(self):
         """Find the square of the number"""
@@ -58,32 +79,12 @@ class CalculatorLayout(BoxLayout):
 
     def power(self):
         """Find the power / exponent of a number"""
-        base = self.ids.calc_field.text
-        if not base:
+        self.exponent_base = self.ids.calc_field.text
+        if not self.exponent_base:
             self.ids.calc_field.text = "Enter base first"
             return
-        # create a pop up for the user
-        popup_layout = BoxLayout(orientation='vertical', spacing=10, padding=10)
-        exponent_input = TextInput(hint_text="Enter exponent", multiline=False, input_filter='float')
-        confirm_btn = Button(text="Calculate", size_hint_y=None, height=40)
-
-        popup = Popup(title="Exponentiation (xʸ)", content=popup_layout, size_hint=(0.8, 0.4))
-        popup_layout.add_widget(exponent_input)
-        popup_layout.add_widget(confirm_btn)
-    
-        def on_confirm(instance):
-            exponent = exponent_input.text
-            if exponent:
-                result = exponentiate(base, exponent)
-                self.ids.calc_field.text = result
-                self.history_manager.add_entry(f"{base}^{exponent} = {result}")
-                self.update_history_display()
-            popup.dismiss()
-
-        confirm_btn.bind(on_press=on_confirm)
-        popup.open()
-
-
+        self.exponent_mode = True
+        self.ids.calc_field.text += "^"
 
 
 class FocusCalc(App):
