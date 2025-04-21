@@ -26,4 +26,12 @@ def percentage(value):
         return str(round(num / 100, 6))
     except ValueError:
         return "Error"
-    
+
+
+def exponentiate(base, exponent):
+    """Find the exponent of a number"""
+    try:
+        result = float(base) ** float(exponent)
+        return str(result)
+    except ValueError:
+        return "Error"
