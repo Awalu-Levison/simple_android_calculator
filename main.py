@@ -5,6 +5,7 @@ from operations.advanced import square, square_root, percentage
 from operations.history import History_Manager
 from operations.advanced import square_root, percentage 
 from operations.advanced import exponentiate
+from operations.history import History_Manager
 
 from kivy.uix.popup import Popup
 from kivy.uix.boxlayout import BoxLayout
@@ -14,9 +15,12 @@ import kivy
 
 
 class CalculatorLayout(BoxLayout):
-    def __init__(self):
-        super(CalculatorLayout, self).__init__()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         self.history_manager = History_Manager()
+        self.exponent_mode = False
+        self.base_value = ""
+     
 
     def calc_symbol(self, symbol):
         self.ids.calc_field.text += symbol
