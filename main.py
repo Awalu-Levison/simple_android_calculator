@@ -4,7 +4,7 @@ from operations.arithmetic import evaluate_expression
 from operations.advanced import square, square_root, percentage
 from operations.history import History_Manager
 from operations.advanced import square_root, percentage 
-from operations.advanced import exponentiate
+from operations.advanced import exponentiate, log_base, log10, ln
 from operations.history import History_Manager
 
 from kivy.uix.popup import Popup
@@ -89,6 +89,31 @@ class CalculatorLayout(BoxLayout):
             return
         self.exponent_mode = True
         self.ids.calc_field.text += "^"
+    
+    def calculate_log(self):
+        """Find the logarith at base 10"""
+        value = self.ids.calc_field.text
+        result = log10(value)
+        self.ids.calc_field.text = result
+        self.history_manager.add_entry(f"log10({value}) = {result}")
+        self.update_history_display()
+    
+
+    def calculate_ln(self):
+        """Find natural log"""
+        value = self.ids.calc_field.text
+        result = ln(value)
+        self.ids.calc_field.text = result
+        self.history_manager.add_entry(f"ln({value}) = {result}")
+        self.update_history_display()
+    
+
+    def calculate_log_base(self, base):
+        value = self.ids.calc_field.text
+        result = log_base(value, base)
+        self.ids.calc_field.text = result
+        self.history_manager.add_entry(f"log base {base} ({value}) = {result}")
+        self.update_history_display()
 
 
 class FocusCalc(App):
