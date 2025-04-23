@@ -90,7 +90,7 @@ class CalculatorLayout(BoxLayout):
         self.exponent_mode = True
         self.ids.calc_field.text += "^"
     
-    def calculate_log(self):
+    def calculate_log10(self):
         """Find the logarith at base 10"""
         value = self.ids.calc_field.text
         result = log10(value)
