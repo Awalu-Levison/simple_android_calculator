@@ -4,9 +4,12 @@ class SafeExpressionChecker(ast.NodeVisitor):
     def visit_Constant(self, node):
         # Allow numbers
         pass
+    
 
     def visit_BinOp(self, node):
         # Allow binary operations
+        if not isinstance(node.op(ast.Add, ast.Sub, ast.Mult, ast.Div, ast.Mod, ast.Pow)):
+            raise ValueError("Unsupported operator")
         self.visit(node.left)
         self.visit(node.right)
 
@@ -44,7 +47,9 @@ def is_safe_expression(expression):
         return False
 
 def evaluate_expression(expression):
-    """Evaluate mathematical expression"""
+    """Evaluate mathematical expression after validating it's safe"""
+    if not is_safe_expression:
+        return "Error: Invalid expression"
     try:
         return str(eval(expression))
     except ZeroDivisionError:
