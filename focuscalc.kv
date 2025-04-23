@@ -97,6 +97,23 @@
         Button:
             text: "xʸ"
             on_press: root.power()
+
+        Button:
+            text: "log10"
+            on_press: root.calculate_log10()
+
+        Button:
+            text: "ln"
+            on_press: root.calculate_ln()
+        
+        Button:
+            text: "log₂"
+            on_press: root.calculate_log_base(2)
+        
+        Button:
+            text: "log₃"
+            on_press: root.calculate_log_base(3)
+   
    
     # history area
     ScrollView:
