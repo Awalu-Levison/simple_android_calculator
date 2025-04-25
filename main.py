@@ -165,6 +165,39 @@ class CalculatorLayout(BoxLayout):
             self.ids.calc_field.text = str(result)
         except ValueError:
             return "Error: Invalid Input"
+    
+    # Find sine inverse
+    def calculate_asin(self):
+        try:
+            Value = float(self.ids.calc_field.text)
+            if -1 <= Value <= 1:
+                result = math.degrees(math.asin(Value))
+                self.ids.calc_field.text = str(result)
+            else:
+                self.ids.calc_field.text = "Error: Out of domain"
+        except ValueError:
+                self.ids.calc_field.text = "Error: Invalid Input"
+    
+    # Find cosine inverse
+    def calculate_acos(self):
+        try:
+            value = float(self.ids.calc_field.text)
+            if -1 <= value <= 1:
+                result = math.degrees(math.acos(value))
+                self.ids.calc_field.text = str(result)
+            else:
+                self.ids.calc_field.text = "Error: Out of domain"
+        except ValueError:
+                self.ids.calc_field.text = "Error: Invalid Input"
+    
+    # Find tan inverse
+    def calculate_atan(self):
+        try:
+            value = float(self.ids.calc_field.text)
+            result = math.degrees(math.atan(value))
+            self.ids.calc_field.text = str(result)
+        except ValueError:
+                self.ids.calc_field.text = "Error: Invalid Input"
 
 
 
