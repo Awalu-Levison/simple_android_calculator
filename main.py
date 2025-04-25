@@ -198,6 +198,24 @@ class CalculatorLayout(BoxLayout):
             self.ids.calc_field.text = str(result)
         except ValueError:
                 self.ids.calc_field.text = "Error: Invalid Input"
+    
+    # Find number inverse
+    def calculate_inverse(self):
+        try:
+            value = float(self.ids.calc_field.text)
+            if value == 0:
+                self.ids.calc_field.text = "Error: Division by 0"
+            else:
+                result = 1 / value
+                self.ids.calc_field.text = str(result)
+        except ValueError:
+                self.ids.calc_field.text = "Error: Invalid Input"
+
+
+
+
+
+
 
 
 
