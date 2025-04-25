@@ -19,7 +19,7 @@
         cols: 4
         spacing: 5
         size_hint_y: 0.65
-        row_default_height: '50dp'
+        row_default_height: '30dp'
         row_force_default: True
 
         Button:
@@ -92,8 +92,9 @@
             on_press: root.square()
             size_hint_x: 1
             size_hint_y: None
-            height: '50dp'
+            height: '30dp'
 
+        
         Button:
             text: "xʸ"
             on_press: root.power()
@@ -148,6 +149,14 @@
         Button:
             text: '1/x'
             on_press: root.calculate_inverse()
+
+        Button:
+            text: "abs"
+            on_press: root.calculate_abs()
+
+        Button:
+            text: "ⁿ√x"
+            on_press: root.calculate_nth_root()
 
    
     # history area
