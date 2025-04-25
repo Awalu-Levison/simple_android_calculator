@@ -210,8 +210,47 @@ class CalculatorLayout(BoxLayout):
                 self.ids.calc_field.text = str(result)
         except ValueError:
                 self.ids.calc_field.text = "Error: Invalid Input"
+    
 
+    # Find the absolute value of a number
+    def calculate_abs(self):
+        try:
+            value = float(self.ids.calc_field.text)
+            result = abs(value)
+            self.ids.calc_field.text = str(result)
+            self.history_manager.add_entry(f"|{value}| = {result}")
+            self.update_history_display()
+        except ValueError:
+            self.ids.calc_field.text = "Error"
+    
+    # Find the nth root of a number
+    def calculate_nth_root(self):
+        try:
+            # Get input from user
+            expression = self.ids.calc_field.text
 
+            # Split the '√' (separate the root and the value)
+            if '√' in expression:
+                parts = expression.split('√')
+                if len(parts) == 2:
+                    number = float(parts[0])
+                    value = float(parts[1])
+
+                    # Calculate the nth number
+                    result = value ** (1 / number)
+
+                    # Show the result of the calculation
+                    self.ids.calc_field.text = str(result)
+
+                    # Log the operatiomn in history
+                    self.history_manager.add_entry(f"{number}√{value} = {result}")
+                    self.update_history_display()
+                else:
+                    self.ids.calc_field.text = "Error"
+            else:
+                self.ids.calc_field.text = "Use n√x format"
+        except Exception as e:
+                    self.ids.calc_field.text = f"Use n√x format"
 
 
 
