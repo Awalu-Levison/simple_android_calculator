@@ -1,3 +1,4 @@
+import math
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from operations.arithmetic import evaluate_expression
@@ -114,6 +115,58 @@ class CalculatorLayout(BoxLayout):
         self.ids.calc_field.text = result
         self.history_manager.add_entry(f"log base {base} ({value}) = {result}")
         self.update_history_display()
+
+
+    def calculate_factorial(self):
+        """Find the factorial of a number"""
+        try:
+            # Get current expression
+            expression = self.ids.calc_field.text
+
+            # Convert to number for calculation
+            number = int(float(expression))
+            if number < 0:
+                self.ids.calc_field.text = "Error: Negative!"
+            else:
+                result = math.factorial(number)
+                self.ids.calc_field.text = str(result)
+        
+        except ValueError:
+            self.ids.calc_field.text = "Error: Invalid Input"
+        except OverflowError:
+            self.ids.calc_field.text = "Error: Too Large"
+    
+
+    # Find the sine of a number
+    def calculate_sin(self):
+        try:
+            value = float(self.ids.calc_field.text)
+            result = math.sin(math.radians(value))
+            self.ids.calc_field.text = str(result)
+        except ValueError:
+            return "Error: Invalid Input"
+    
+
+    # Find the cosine of a number
+    def calculate_cos(self):
+        try:
+            value = float(self.ids.calc_field.text)
+            result = math.cos(math.radians(value))
+            self.ids.calc_field.text = str(result)
+        except ValueError:
+            return "Error: Invalid Input"
+    
+
+    # Find tangent of a number
+    def calculate_tan(self):
+        try:
+            value = float(self.ids.calc_field.text)
+            result = math.tan(math.radians(value))
+            self.ids.calc_field.text = str(result)
+        except ValueError:
+            return "Error: Invalid Input"
+
+
 
 
 class FocusCalc(App):
