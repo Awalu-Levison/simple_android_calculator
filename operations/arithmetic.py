@@ -1,4 +1,5 @@
 import ast
+import re
 
 class SafeExpressionChecker(ast.NodeVisitor):
     def visit_Constant(self, node):
@@ -48,11 +49,19 @@ def is_safe_expression(expression):
 
 def evaluate_expression(expression):
     """Evaluate mathematical expression after validating it's safe"""
-    if not is_safe_expression:
-        return "Error: Invalid expression"
     try:
+        # Handle nth root notation: e.g., 3ⁿ√27
+        math = re.search(r"(\d+)ⁿ√(\d+(\.\d+)?)", expression)
+        if math:
+            number = int(math.group(1))
+            value = int(math.group(2))
+            result = value ** (1 / number)
+            return str(result)
+        
+        # Normal Calculations
         return str(eval(expression))
     except ZeroDivisionError:
         return "Error: Division by 0"
     except Exception as e:
         return f"Error: {str(e)}"
+    
