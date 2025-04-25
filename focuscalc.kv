@@ -19,7 +19,7 @@
         cols: 4
         spacing: 5
         size_hint_y: 0.65
-        row_default_height: '60dp'
+        row_default_height: '50dp'
         row_force_default: True
 
         Button:
@@ -92,7 +92,7 @@
             on_press: root.square()
             size_hint_x: 1
             size_hint_y: None
-            height: '60dp'
+            height: '50dp'
 
         Button:
             text: "xʸ"
@@ -113,7 +113,10 @@
         Button:
             text: "log₃"
             on_press: root.calculate_log_base(3)
-   
+        
+        Button:
+            text: "n!"
+            on_press: root.calculate_factorial()
    
     # history area
     ScrollView:
