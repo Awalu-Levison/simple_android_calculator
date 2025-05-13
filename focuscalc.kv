@@ -10,7 +10,6 @@
         multiline: False
         readonly: True
         halign: 'right'
-        valign: 'middle'
         size_hint_y: 0.15
         text: ''
 
@@ -85,7 +84,7 @@
             on_press: root.square_root()
         Button:
             text: '='
-            on_press: root.get_result()
+            on_press: root.get_result()  # <-- FIXED: call get_result, not evaluate_expression
 
         Button:
             text: 'x²'
@@ -155,10 +154,18 @@
             on_press: root.calculate_abs()
 
         Button:
-            text: "ⁿ√x"
-            on_press: root.calculate_nth_root()
+            text: "ⁿ√"
+            # Insert a default template "2ⁿ√" for user-friendliness
+            on_press: root.calc_symbol('ⁿ√')  # Insert 2ⁿ√ as a template
 
-   
+    # Optionally, add a Label for user guidance (uncomment if desired)
+    # Label:
+    #     text: "For nth root, use the format nⁿ√x (e.g., 3ⁿ√27 for cube root of 27)"
+    #     font_size: 12
+    #     color: 0.5, 0.5, 0.5, 1
+    #     size_hint_y: None
+    #     height: '20dp'
+
     # history area
     ScrollView:
         size_hint_y: 0.2
@@ -172,4 +179,4 @@
             valign: 'top'
             halign: 'left'
             font_size: 14
-            text: ''
+            text: root.history_data  # <-- FIXED: bind to Python property

@@ -1,44 +1,53 @@
 import ast
-import re
 
 class SafeExpressionChecker(ast.NodeVisitor):
+    """
+    AST NodeVisitor to ensure only safe arithmetic expressions are allowed.
+    """
     def visit_Constant(self, node):
-        # Allow numbers
-        pass
-    
+        # Allow only numeric constants
+        if not isinstance(node.value, (int, float)):
+            raise ValueError("Only numeric constants are allowed.")
+
 
     def visit_BinOp(self, node):
-        # Allow binary operations
-        if not isinstance(node.op(ast.Add, ast.Sub, ast.Mult, ast.Div, ast.Mod, ast.Pow)):
+        # Allow only safe binary operations
+        if not isinstance(node.op, (ast.Add, ast.Sub, ast.Mult, ast.Div, ast.Mod, ast.Pow)):
             raise ValueError("Unsupported operator")
         self.visit(node.left)
         self.visit(node.right)
 
+
     def visit_UnaryOp(self, node):
-        # Allow unary operations
+        # Allow unary operations (+, -)
+        if not isinstance(node.op, (ast.UAdd, ast.USub)):
+            raise ValueError("Unsupported unary operator")
         self.visit(node.operand)
 
+
     def visit_Tuple(self, node):
-        # Allow tuples if needed
         for elem in node.elts:
             self.visit(elem)
+
 
     def visit_List(self, node):
-        # Allow lists if needed
         for elem in node.elts:
             self.visit(elem)
+            
 
     def visit_Call(self, node):
-        # Function calls are not allowed
         raise ValueError("Function calls are not allowed")
 
     def visit_Name(self, node):
-        # Variable names are not allowed
         raise ValueError("Variable names are not allowed")
 
-    # And so on for other node types that are not allowed
+    # Add other visit_ methods as needed for unsupported nodes
 
 def is_safe_expression(expression):
+    """
+    Checks if the given expression is safe for evaluation.
+    Returns True if safe, False otherwise.
+    """
     try:
         tree = ast.parse(expression, mode='eval')
         checker = SafeExpressionChecker()
@@ -47,21 +56,52 @@ def is_safe_expression(expression):
     except (SyntaxError, ValueError):
         return False
 
-def evaluate_expression(expression):
-    """Evaluate mathematical expression after validating it's safe"""
-    try:
-        # Handle nth root notation: e.g., 3ⁿ√27
-        math = re.search(r"(\d+)ⁿ√(\d+(\.\d+)?)", expression)
-        if math:
-            number = int(math.group(1))
-            value = int(math.group(2))
-            result = value ** (1 / number)
-            return str(result)
-        
-        # Normal Calculations
-        return str(eval(expression))
-    except ZeroDivisionError:
-        return "Error: Division by 0"
-    except Exception as e:
-        return f"Error: {str(e)}"
-    
+class Calculator:
+    """
+    Calculator class with safe expression evaluation.
+    """
+    # ...existing code...
+
+    def nth_root(self, n, x):
+        """
+        Calculates the nth root of x.
+        """
+        try:
+            n = float(n)
+            x = float(x)
+            if n == 0:
+                raise ValueError("Root degree cannot be zero.")
+            return x ** (1.0 / n)
+        except Exception as e:
+            raise ValueError(f"Invalid nth root input: {e}")
+
+    def evaluate_expression(self):
+        """
+        Evaluates the expression in the calculator field safely.
+        Handles nth root and normal arithmetic expressions.
+        """
+        expression = self.ids.calc_field.text
+
+        # Handle nth root first
+        if 'ⁿ√' in expression:
+            try:
+                n, x = expression.split('ⁿ√')
+                n = n.strip()
+                x = x.strip()
+                result = self.nth_root(n, x)
+                self.ids.calc_field.text = str(result)
+                return
+            except Exception as e:
+                self.ids.calc_field.text = f"Error: {str(e)}"
+                return
+
+        # Otherwise, normal evaluation
+        if not is_safe_expression(expression):
+            self.ids.calc_field.text = "Error: Unsafe or invalid expression"
+            return
+        try:
+            tree = ast.parse(expression, mode='eval')
+            result = eval(compile(tree, filename="", mode="eval"))
+            self.ids.calc_field.text = str(result)
+        except Exception as e:
+            self.ids.calc_field.text = f"Error: {str(e)}"

@@ -1,56 +1,56 @@
 import math
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
-from operations.arithmetic import evaluate_expression
-from operations.advanced import square, square_root, percentage
-from operations.history import History_Manager
-from operations.advanced import square_root, percentage 
-from operations.advanced import exponentiate, log_base, log10, ln
-from operations.history import History_Manager
-
-from kivy.uix.popup import Popup
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.textinput import TextInput
-from kivy.uix.button import Button
-import kivy
-
+from kivy.properties import StringProperty
+from operations.advanced import nth_root, square, square_root, percentage, exponentiate, log_base, log10, ln
+from operations.history import HistoryManager
 
 class CalculatorLayout(BoxLayout):
+    history_data = StringProperty("")  # Kivy property for history data
+
+    """
+    Main calculator layout and logic.
+    """
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.history_manager = History_Manager()
+        self.history_manager = HistoryManager()
         self.exponent_mode = False
-        self.base_value = ""
-     
+        self.exponent_base = ""
+        self.history_data = ""  # Initialize history data
 
     def calc_symbol(self, symbol):
+        """Append a symbol to the calculator field."""
         self.ids.calc_field.text += symbol
-    
+
     def backspace(self):
-        """Clear the screen"""
+        """Remove the last character from the calculator field."""
         self.ids.calc_field.text = self.ids.calc_field.text[:-1]
 
     def get_result(self):
-        """Get result of an operation"""
+        """
+        Evaluate the current expression and update the result.
+        Handles exponentiation mode and normal evaluation.
+        """
         expression = self.ids.calc_field.text
 
-        # Check exponentiation mode
+        # Exponentiation mode
         if self.exponent_mode and "^" in expression:
             try:
                 base, exponent = expression.split("^")
                 result = exponentiate(base, exponent)
                 self.ids.calc_field.text = result
                 self.history_manager.add_entry(f"{base}^{exponent} = {result}")
-            except Exception as e:
+            except Exception:
                 self.ids.calc_field.text = "Error"
             finally:
                 self.exponent_mode = False
                 self.exponent_base = ""
                 self.update_history_display()
                 return
-            
-        # Fallback: normal evaluation
+
+        # Fallback: normal evaluation (should use safe eval in production)
         try:
+            # Consider using a safe eval or parser here
             result = str(eval(expression))
             self.ids.calc_field.text = result
             self.history_manager.add_entry(f"{expression} = {result}")
@@ -58,149 +58,179 @@ class CalculatorLayout(BoxLayout):
             self.ids.calc_field.text = "Error"
         self.update_history_display()
 
-
     def square(self):
-        """Find the square of the number"""
-        self.ids.calc_field.text = square(self.ids.calc_field.text)
-        self.history_manager.add_entry(f"{self.ids.calc_field.text}2")
+        """Find the square of the number."""
+        value = self.ids.calc_field.text
+        result = square(value)
+        self.ids.calc_field.text = result
+        self.history_manager.add_entry(f"{value}² = {result}")
+        self.update_history_display()
 
     def square_root(self):
-        """Find square root of a number"""
-        self.ids.calc_field.text = square_root(self.ids.calc_field.text)
-        self.history_manager.add_entry(f"√{self.ids.calc_field.text}")
+        """Find square root of a number."""
+        value = self.ids.calc_field.text
+        result = square_root(value)
+        self.ids.calc_field.text = result
+        self.history_manager.add_entry(f"√{value} = {result}")
+        self.update_history_display()
 
     def percentage(self):
-        """Calculate percentage of a number"""
-        self.ids.calc_field.text = percentage(self.ids.calc_field.text)
-        self.history_manager.add_entry(f"{self.ids.calc_field.text}%")
+        """Calculate percentage of a number."""
+        value = self.ids.calc_field.text
+        result = percentage(value)
+        self.ids.calc_field.text = result
+        self.history_manager.add_entry(f"{value}% = {result}")
+        self.update_history_display()
 
     def clear(self):
-        """Clear the screen"""
+        """Clear the calculator field."""
         self.ids.calc_field.text = ""
-    
+
     def update_history_display(self):
-        """Update user data to history list"""
+        """Update the history display."""
         self.history_data = self.history_manager.get_history()
+        # Optionally, also update the label directly if needed:
+        # self.ids.history_label.text = self.history_data
 
     def power(self):
-        """Find the power / exponent of a number"""
+        """Prepare for exponent input."""
         self.exponent_base = self.ids.calc_field.text
         if not self.exponent_base:
             self.ids.calc_field.text = "Enter base first"
             return
         self.exponent_mode = True
         self.ids.calc_field.text += "^"
-    
+
     def calculate_log10(self):
-        """Find the logarith at base 10"""
+        """Calculate log base 10."""
         value = self.ids.calc_field.text
         result = log10(value)
         self.ids.calc_field.text = result
         self.history_manager.add_entry(f"log10({value}) = {result}")
         self.update_history_display()
-    
 
     def calculate_ln(self):
-        """Find natural log"""
+        """Calculate natural logarithm."""
         value = self.ids.calc_field.text
         result = ln(value)
         self.ids.calc_field.text = result
         self.history_manager.add_entry(f"ln({value}) = {result}")
         self.update_history_display()
-    
 
     def calculate_log_base(self, base):
+        """Calculate logarithm with a custom base."""
         value = self.ids.calc_field.text
         result = log_base(value, base)
         self.ids.calc_field.text = result
         self.history_manager.add_entry(f"log base {base} ({value}) = {result}")
         self.update_history_display()
 
-
     def calculate_factorial(self):
-        """Find the factorial of a number"""
+        """Calculate factorial of a number."""
         try:
-            # Get current expression
-            expression = self.ids.calc_field.text
-
-            # Convert to number for calculation
-            number = int(float(expression))
+            value = self.ids.calc_field.text
+            number = int(float(value))
             if number < 0:
                 self.ids.calc_field.text = "Error: Negative!"
             else:
                 result = math.factorial(number)
                 self.ids.calc_field.text = str(result)
-        
+                self.history_manager.add_entry(f"{number}! = {result}")
         except ValueError:
             self.ids.calc_field.text = "Error: Invalid Input"
         except OverflowError:
             self.ids.calc_field.text = "Error: Too Large"
-    
+        self.update_history_display()
 
-    # Find the sine of a number
+    def calculate_nth_root(self):
+        """Calculate the nth root of a number (format: nⁿ√x)."""
+        expression = self.ids.calc_field.text
+        if 'ⁿ√' in expression:
+            try:
+                num, value = [part.strip() for part in expression.split('ⁿ√')]
+                result = nth_root(num, value)
+                self.ids.calc_field.text = str(result)
+                self.history_manager.add_entry(f"{num}ⁿ√{value} = {result}")
+            except Exception as e:
+                self.ids.calc_field.text = f"Error: {str(e)}"
+        else:
+            self.ids.calc_field.text = "Error: Use format nⁿ√x"
+        self.update_history_display()
+
     def calculate_sin(self):
+        """Calculate sine of the input (degrees)."""
         try:
             value = float(self.ids.calc_field.text)
             result = math.sin(math.radians(value))
             self.ids.calc_field.text = str(result)
+            self.history_manager.add_entry(f"sin({value}) = {result}")
         except ValueError:
-            return "Error: Invalid Input"
-    
+            self.ids.calc_field.text = "Error: Invalid Input"
+        self.update_history_display()
 
-    # Find the cosine of a number
     def calculate_cos(self):
+        """Calculate cosine of the input (degrees)."""
         try:
             value = float(self.ids.calc_field.text)
             result = math.cos(math.radians(value))
             self.ids.calc_field.text = str(result)
+            self.history_manager.add_entry(f"cos({value}) = {result}")
         except ValueError:
-            return "Error: Invalid Input"
-    
+            self.ids.calc_field.text = "Error: Invalid Input"
+        self.update_history_display()
 
-    # Find tangent of a number
     def calculate_tan(self):
+        """Calculate tangent of the input (degrees)."""
         try:
             value = float(self.ids.calc_field.text)
             result = math.tan(math.radians(value))
             self.ids.calc_field.text = str(result)
+            self.history_manager.add_entry(f"tan({value}) = {result}")
         except ValueError:
-            return "Error: Invalid Input"
-    
-    # Find sine inverse
+            self.ids.calc_field.text = "Error: Invalid Input"
+        self.update_history_display()
+
     def calculate_asin(self):
+        """Calculate arcsine (degrees)."""
         try:
-            Value = float(self.ids.calc_field.text)
-            if -1 <= Value <= 1:
-                result = math.degrees(math.asin(Value))
+            value = float(self.ids.calc_field.text)
+            if -1 <= value <= 1:
+                result = math.degrees(math.asin(value))
                 self.ids.calc_field.text = str(result)
+                self.history_manager.add_entry(f"asin({value}) = {result}")
             else:
                 self.ids.calc_field.text = "Error: Out of domain"
         except ValueError:
-                self.ids.calc_field.text = "Error: Invalid Input"
-    
-    # Find cosine inverse
+            self.ids.calc_field.text = "Error: Invalid Input"
+        self.update_history_display()
+
     def calculate_acos(self):
+        """Calculate arccosine (degrees)."""
         try:
             value = float(self.ids.calc_field.text)
             if -1 <= value <= 1:
                 result = math.degrees(math.acos(value))
                 self.ids.calc_field.text = str(result)
+                self.history_manager.add_entry(f"acos({value}) = {result}")
             else:
                 self.ids.calc_field.text = "Error: Out of domain"
         except ValueError:
-                self.ids.calc_field.text = "Error: Invalid Input"
-    
-    # Find tan inverse
+            self.ids.calc_field.text = "Error: Invalid Input"
+        self.update_history_display()
+
     def calculate_atan(self):
+        """Calculate arctangent (degrees)."""
         try:
             value = float(self.ids.calc_field.text)
             result = math.degrees(math.atan(value))
             self.ids.calc_field.text = str(result)
+            self.history_manager.add_entry(f"atan({value}) = {result}")
         except ValueError:
-                self.ids.calc_field.text = "Error: Invalid Input"
-    
-    # Find number inverse
+            self.ids.calc_field.text = "Error: Invalid Input"
+        self.update_history_display()
+
     def calculate_inverse(self):
+        """Calculate the multiplicative inverse."""
         try:
             value = float(self.ids.calc_field.text)
             if value == 0:
@@ -208,61 +238,27 @@ class CalculatorLayout(BoxLayout):
             else:
                 result = 1 / value
                 self.ids.calc_field.text = str(result)
+                self.history_manager.add_entry(f"1/({value}) = {result}")
         except ValueError:
-                self.ids.calc_field.text = "Error: Invalid Input"
-    
+            self.ids.calc_field.text = "Error: Invalid Input"
+        self.update_history_display()
 
-    # Find the absolute value of a number
     def calculate_abs(self):
+        """Calculate the absolute value."""
         try:
             value = float(self.ids.calc_field.text)
             result = abs(value)
             self.ids.calc_field.text = str(result)
             self.history_manager.add_entry(f"|{value}| = {result}")
-            self.update_history_display()
         except ValueError:
             self.ids.calc_field.text = "Error"
-    
-    # Find the nth root of a number
-    def calculate_nth_root(self):
-        try:
-            # Get input from user
-            expression = self.ids.calc_field.text
-
-            # Split the '√' (separate the root and the value)
-            if '√' in expression:
-                parts = expression.split('√')
-                if len(parts) == 2:
-                    number = float(parts[0])
-                    value = float(parts[1])
-
-                    # Calculate the nth number
-                    result = value ** (1 / number)
-
-                    # Show the result of the calculation
-                    self.ids.calc_field.text = str(result)
-
-                    # Log the operatiomn in history
-                    self.history_manager.add_entry(f"{number}√{value} = {result}")
-                    self.update_history_display()
-                else:
-                    self.ids.calc_field.text = "Error"
-            else:
-                self.ids.calc_field.text = "Use n√x format"
-        except Exception as e:
-                    self.ids.calc_field.text = f"Use n√x format"
-
-
-
-
-
-
-
+        self.update_history_display()
 
 class FocusCalc(App):
+    """Main App class."""
     def build(self):
         return CalculatorLayout()
-    
+
 if __name__ == '__main__':
     MyCalculator = FocusCalc()
     MyCalculator.run()
