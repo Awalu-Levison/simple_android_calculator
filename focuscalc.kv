@@ -114,7 +114,6 @@
             text: "log₃"
             on_press: root.calculate_log_base(3)
         
-        
         Button:
             text: "n!"
             on_press: root.calculate_factorial()
@@ -131,6 +130,9 @@
             text: 'tan'
             on_press: root.calculate_tan()
         
+        Button:
+            text: 'n√x'
+            on_press: root.calc_symbol('√')
 
         Button:
             text: 'asin'
@@ -153,14 +155,9 @@
             text: "abs"
             on_press: root.calculate_abs()
 
-        Button:
-            text: "ⁿ√"
-            # Insert a default template "2ⁿ√" for user-friendliness
-            on_press: root.calc_symbol('ⁿ√')  # Insert 2ⁿ√ as a template
-
     # Optionally, add a Label for user guidance (uncomment if desired)
     # Label:
-    #     text: "For nth root, use the format nⁿ√x (e.g., 3ⁿ√27 for cube root of 27)"
+    #     text: "For nth root, use the format n√x (e.g., 3√27 for cube root of 27)"
     #     font_size: 12
     #     color: 0.5, 0.5, 0.5, 1
     #     size_hint_y: None

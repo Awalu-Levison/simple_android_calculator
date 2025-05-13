@@ -1,9 +1,11 @@
 import math
+import re
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import StringProperty
 from operations.advanced import nth_root, square, square_root, percentage, exponentiate, log_base, log10, ln
 from operations.history import HistoryManager
+from operations.math_utils import nth_root
 
 class CalculatorLayout(BoxLayout):
     history_data = StringProperty("")  # Kivy property for history data
@@ -17,6 +19,7 @@ class CalculatorLayout(BoxLayout):
         self.exponent_mode = False
         self.exponent_base = ""
         self.history_data = ""  # Initialize history data
+        self.root_degree = None  # <-- Add this line to initialize root_degree
 
     def calc_symbol(self, symbol):
         """Append a symbol to the calculator field."""
@@ -29,7 +32,7 @@ class CalculatorLayout(BoxLayout):
     def get_result(self):
         """
         Evaluate the current expression and update the result.
-        Handles exponentiation mode and normal evaluation.
+        Handles exponentiation mode, nth root, and normal evaluation.
         """
         expression = self.ids.calc_field.text
 
@@ -47,6 +50,19 @@ class CalculatorLayout(BoxLayout):
                 self.exponent_base = ""
                 self.update_history_display()
                 return
+
+        # Nth root mode: support both 3√27, 3n√27, and 27n√3
+        nth_root_match = re.match(r'^\s*(\d+)\s*(?:n)?√\s*(-?\d+(\.\d+)?)\s*$', expression)
+        if nth_root_match:
+            degree = float(nth_root_match.group(2))
+            base = float(nth_root_match.group(1))
+            result = nth_root(degree, base)
+            self.ids.calc_field.text = str(result)
+            self.history_manager.add_entry(f"{degree}√{base} = {result}")
+            self.update_history_display()
+            return
+
+
 
         # Fallback: normal evaluation (should use safe eval in production)
         try:
@@ -142,21 +158,23 @@ class CalculatorLayout(BoxLayout):
             self.ids.calc_field.text = "Error: Too Large"
         self.update_history_display()
 
-    def calculate_nth_root(self):
-        """Calculate the nth root of a number (format: nⁿ√x)."""
-        expression = self.ids.calc_field.text
-        if 'ⁿ√' in expression:
-            try:
-                num, value = [part.strip() for part in expression.split('ⁿ√')]
-                result = nth_root(num, value)
-                self.ids.calc_field.text = str(result)
-                self.history_manager.add_entry(f"{num}ⁿ√{value} = {result}")
-            except Exception as e:
-                self.ids.calc_field.text = f"Error: {str(e)}"
-        else:
-            self.ids.calc_field.text = "Error: Use format nⁿ√x"
-        self.update_history_display()
 
+    def calculate_root(self):
+        try:
+            base = float(self.ids.calc_field.text)
+            # Always fetch root degree from the input field
+            degree_text = self.ids.root_degree_input.text.strip()
+            if not degree_text:
+                degree = 2  # Default to square root if empty
+            else:
+                degree = float(degree_text)
+            result = nth_root(degree, base)
+            self.ids.calc_field.text = str(result)
+            self.history_manager.add_entry(f"{degree}√{base} = {result}")
+        except ValueError:
+            self.ids.calc_field.text = "Error: Invalid input"
+        except Exception as e:
+            self.ids.calc_field.text = f"Error: {str(e)}"
     def calculate_sin(self):
         """Calculate sine of the input (degrees)."""
         try:
@@ -167,6 +185,7 @@ class CalculatorLayout(BoxLayout):
         except ValueError:
             self.ids.calc_field.text = "Error: Invalid Input"
         self.update_history_display()
+
 
     def calculate_cos(self):
         """Calculate cosine of the input (degrees)."""
@@ -179,6 +198,7 @@ class CalculatorLayout(BoxLayout):
             self.ids.calc_field.text = "Error: Invalid Input"
         self.update_history_display()
 
+
     def calculate_tan(self):
         """Calculate tangent of the input (degrees)."""
         try:
@@ -189,6 +209,7 @@ class CalculatorLayout(BoxLayout):
         except ValueError:
             self.ids.calc_field.text = "Error: Invalid Input"
         self.update_history_display()
+
 
     def calculate_asin(self):
         """Calculate arcsine (degrees)."""
@@ -204,6 +225,7 @@ class CalculatorLayout(BoxLayout):
             self.ids.calc_field.text = "Error: Invalid Input"
         self.update_history_display()
 
+
     def calculate_acos(self):
         """Calculate arccosine (degrees)."""
         try:
@@ -218,6 +240,7 @@ class CalculatorLayout(BoxLayout):
             self.ids.calc_field.text = "Error: Invalid Input"
         self.update_history_display()
 
+
     def calculate_atan(self):
         """Calculate arctangent (degrees)."""
         try:
@@ -228,6 +251,7 @@ class CalculatorLayout(BoxLayout):
         except ValueError:
             self.ids.calc_field.text = "Error: Invalid Input"
         self.update_history_display()
+
 
     def calculate_inverse(self):
         """Calculate the multiplicative inverse."""
@@ -242,6 +266,7 @@ class CalculatorLayout(BoxLayout):
         except ValueError:
             self.ids.calc_field.text = "Error: Invalid Input"
         self.update_history_display()
+
 
     def calculate_abs(self):
         """Calculate the absolute value."""
