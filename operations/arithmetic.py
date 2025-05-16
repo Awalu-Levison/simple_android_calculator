@@ -60,8 +60,6 @@ class Calculator:
     """
     Calculator class with safe expression evaluation.
     """
-    # ...existing code...
-
     def nth_root(self, n, x):
         """
         Calculates the nth root of x.
@@ -71,17 +69,17 @@ class Calculator:
             x = float(x)
             if n == 0:
                 raise ValueError("Root degree cannot be zero.")
+            if x < 0 and int(n) % 2 == 0:
+                raise ValueError("Cannot compute even root of a negative number.")
             return x ** (1.0 / n)
         except Exception as e:
             raise ValueError(f"Invalid nth root input: {e}")
 
-    def evaluate_expression(self):
+    def evaluate_expression(self, expression):
         """
-        Evaluates the expression in the calculator field safely.
+        Evaluates the given expression safely.
         Handles nth root and normal arithmetic expressions.
         """
-        expression = self.ids.calc_field.text
-
         # Handle nth root first
         if 'ⁿ√' in expression:
             try:
@@ -89,19 +87,16 @@ class Calculator:
                 n = n.strip()
                 x = x.strip()
                 result = self.nth_root(n, x)
-                self.ids.calc_field.text = str(result)
-                return
+                return str(result)
             except Exception as e:
-                self.ids.calc_field.text = f"Error: {str(e)}"
-                return
+                return f"Error: {str(e)}"
 
         # Otherwise, normal evaluation
         if not is_safe_expression(expression):
-            self.ids.calc_field.text = "Error: Unsafe or invalid expression"
-            return
+            return "Error: Unsafe or invalid expression"
         try:
             tree = ast.parse(expression, mode='eval')
             result = eval(compile(tree, filename="", mode="eval"))
-            self.ids.calc_field.text = str(result)
+            return str(result)
         except Exception as e:
-            self.ids.calc_field.text = f"Error: {str(e)}"
+            return f"Error: {str(e)}"
