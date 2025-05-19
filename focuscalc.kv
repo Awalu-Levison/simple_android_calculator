@@ -1,159 +1,250 @@
 <CalculatorLayout>:
     orientation: 'vertical'
-    spacing: 10
-    padding: 10
+    spacing: 16
+    padding: [20, 20, 20, 10]
 
     # Display area
-    TextInput:
-        id: calc_field
-        font_size: 32
-        multiline: False
-        readonly: True
-        halign: 'right'
-        size_hint_y: 0.15
-        text: ''
+    BoxLayout:
+        size_hint_y: 0.18
+        padding: [0, 0, 0, 8]
+        canvas.before:
+            Color:
+                rgba: 0.95, 0.95, 0.98, 1
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                radius: [8, 8, 8, 8]
+        TextInput:
+            id: calc_field
+            font_size: 38
+            multiline: False
+            readonly: True
+            halign: 'right'
+            background_color: 0,0,0,0
+            foreground_color: 0.1,0.1,0.2,1
+            cursor_color: 0,0,0,0
+            size_hint_y: 1
+            text: ''
+
+    # User guidance label
+    Label:
+        text: "Tip: For nth root, use n√x (e.g., 3√27 for cube root of 27)"
+        font_size: 13
+        color: 0.4, 0.4, 0.6, 1
+        size_hint_y: None
+        height: '22dp'
+        halign: 'left'
+        valign: 'middle'
+        text_size: self.width, None
 
     # Buttons area
-    GridLayout:
-        cols: 4
-        spacing: 5
-        size_hint_y: 0.65
-        row_default_height: '30dp'
-        row_force_default: True
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint_y: 0.62
+        spacing: 8
 
-        Button:
-            text: '7'
-            on_press: root.calc_symbol('7')
-        Button:
-            text: '8'
-            on_press: root.calc_symbol('8')
-        Button:
-            text: '9'
-            on_press: root.calc_symbol('9')
-        Button:
-            text: '⌫'
-            on_press: root.backspace()
+        # Main keypad area
+        BoxLayout:
+            orientation: 'horizontal'
+            spacing: 8
 
-        Button:
-            text: '4'
-            on_press: root.calc_symbol('4')
-        Button:
-            text: '5'
-            on_press: root.calc_symbol('5')
-        Button:
-            text: '6'
-            on_press: root.calc_symbol('6')
-        Button:
-            text: '/'
-            on_press: root.calc_symbol('/')
+            # Left column (C, ÷, ×)
+            BoxLayout:
+                orientation: 'vertical'
+                spacing: 8
+                size_hint_x: 0.18
+                Button:
+                    text: 'C'
+                    background_color: 1, 0.7, 0.7, 1
+                    color: 0.7, 0.1, 0.1, 1
+                    font_size: 22
+                    on_press: root.clear()
+                Button:
+                    text: '/'
+                    background_color: 0.8, 0.85, 1, 1
+                    color: 0.1, 0.2, 0.5, 1
+                    font_size: 22
+                    on_press: root.calc_symbol('/')
+                Button:
+                    text: 'x'
+                    background_color: 0.8, 0.85, 1, 1
+                    color: 0.1, 0.2, 0.5, 1
+                    font_size: 22
+                    on_press: root.calc_symbol('x')
 
-        Button:
-            text: '1'
-            on_press: root.calc_symbol('1')
-        Button:
-            text: '2'
-            on_press: root.calc_symbol('2')
-        Button:
-            text: '3'
-            on_press: root.calc_symbol('3')
-        Button:
-            text: 'x'
-            on_press: root.calc_symbol('x')
-        
-        Button:
-            text: '0'
-            on_press: root.calc_symbol('0')
-        Button:
-            text: '.'
-            on_press: root.calc_symbol('.')
-        Button:
-            text: '-'
-            on_press: root.calc_symbol('-')
-        Button:
-            text: '+'
-            on_press: root.calc_symbol('+')
+            # Center 3x3 number grid
+            GridLayout:
+                cols: 3
+                rows: 3
+                spacing: 8
+                size_hint_x: 0.64
+                Button:
+                    text: '7'
+                    background_color: 0.93, 0.93, 0.98, 1
+                    color: 0.15, 0.15, 0.25, 1
+                    font_size: 22
+                    on_press: root.calc_symbol('7')
+                Button:
+                    text: '8'
+                    background_color: 0.93, 0.93, 0.98, 1
+                    color: 0.15, 0.15, 0.25, 1
+                    font_size: 22
+                    on_press: root.calc_symbol('8')
+                Button:
+                    text: '9'
+                    background_color: 0.93, 0.93, 0.98, 1
+                    color: 0.15, 0.15, 0.25, 1
+                    font_size: 22
+                    on_press: root.calc_symbol('9')
+                Button:
+                    text: '4'
+                    background_color: 0.93, 0.93, 0.98, 1
+                    color: 0.15, 0.15, 0.25, 1
+                    font_size: 22
+                    on_press: root.calc_symbol('4')
+                Button:
+                    text: '5'
+                    background_color: 0.93, 0.93, 0.98, 1
+                    color: 0.15, 0.15, 0.25, 1
+                    font_size: 22
+                    on_press: root.calc_symbol('5')
+                Button:
+                    text: '6'
+                    background_color: 0.93, 0.93, 0.98, 1
+                    color: 0.15, 0.15, 0.25, 1
+                    font_size: 22
+                    on_press: root.calc_symbol('6')
+                Button:
+                    text: '1'
+                    background_color: 0.93, 0.93, 0.98, 1
+                    color: 0.15, 0.15, 0.25, 1
+                    font_size: 22
+                    on_press: root.calc_symbol('1')
+                Button:
+                    text: '2'
+                    background_color: 0.93, 0.93, 0.98, 1
+                    color: 0.15, 0.15, 0.25, 1
+                    font_size: 22
+                    on_press: root.calc_symbol('2')
+                Button:
+                    text: '3'
+                    background_color: 0.93, 0.93, 0.98, 1
+                    color: 0.15, 0.15, 0.25, 1
+                    font_size: 22
+                    on_press: root.calc_symbol('3')
 
-        Button:
-            text: 'C'
-            on_press: root.clear()
-        Button:
-            text: '%'
-            on_press: root.percentage()
-        Button:
-            text: '√'
-            on_press: root.square_root()
-        Button:
-            text: '='
-            on_press: root.get_result()  # <-- FIXED: call get_result, not evaluate_expression
+            # Right column (⌫, −, +, =)
+            BoxLayout:
+                orientation: 'vertical'
+                spacing: 8
+                size_hint_x: 0.18
+                Button:
+                    text: '⌫'
+                    background_color: 1, 0.7, 0.7, 1
+                    color: 0.7, 0.1, 0.1, 1
+                    font_size: 22
+                    on_press: root.backspace()
+                Button:
+                    text: '-'
+                    background_color: 0.8, 0.85, 1, 1
+                    color: 0.1, 0.2, 0.5, 1
+                    font_size: 22
+                    on_press: root.calc_symbol('-')
+                Button:
+                    text: '+'
+                    background_color: 0.8, 0.85, 1, 1
+                    color: 0.1, 0.2, 0.5, 1
+                    font_size: 22
+                    on_press: root.calc_symbol('+')
+                Button:
+                    text: '='
+                    background_color: 0.3, 0.7, 1, 1
+                    color: 1, 1, 1, 1
+                    font_size: 24
+                    on_press: root.get_result()
 
-        Button:
-            text: 'x²'
-            on_press: root.square()
-            size_hint_x: 1
+        # Bottom row for 0, ., %
+        BoxLayout:
+            orientation: 'horizontal'
+            spacing: 8
             size_hint_y: None
-            height: '30dp'
+            height: '44dp'
+            Button:
+                text: '%'
+                background_color: 0.9, 1, 0.9, 1
+                color: 0.1, 0.4, 0.1, 1
+                font_size: 22
+                on_press: root.percentage()
+            Button:
+                text: '0'
+                background_color: 0.93, 0.93, 0.98, 1
+                color: 0.15, 0.15, 0.25, 1
+                font_size: 22
+                on_press: root.calc_symbol('0')
+            Button:
+                text: '.'
+                background_color: 0.93, 0.93, 0.98, 1
+                color: 0.15, 0.15, 0.25, 1
+                font_size: 22
+                on_press: root.calc_symbol('.')
 
-        
-        Button:
-            text: "xʸ"
-            on_press: root.power()
-
-        Button:
-            text: "log10"
-            on_press: root.calculate_log10()
-
-        Button:
-            text: "ln"
-            on_press: root.calculate_ln()
-        
-        Button:
-            text: "log₂"
-            on_press: root.calculate_log_base(2)
-        
-        Button:
-            text: "log₃"
-            on_press: root.calculate_log_base(3)
-        
-        Button:
-            text: "n!"
-            on_press: root.calculate_factorial()
-        
-        Button:
-            text: 'sin'
-            on_press: root.calculate_sin()
-        
-        Button:
-            text: 'cos'
-            on_press: root.calculate_cos()
-        
-        Button:
-            text: 'tan'
-            on_press: root.calculate_tan()
-        
-        Button:
-            text: 'n√x'
-            on_press: root.calc_symbol('√')
-
-        Button:
-            text: 'asin'
-            on_press: root.calculate_asin()
-        
-        Button:
-            text: 'acos'
-            on_press: root.calculate_acos()
-
-
-        Button:
-            text: 'atan'
-            on_press: root.calculate_atan()
-        
-        Button:
-            text: '1/x'
-            on_press: root.calculate_inverse()
-
-        Button:
-            text: "abs"
-            on_press: root.calculate_abs()
+        # Scientific and advanced buttons (optional, adjust as needed)
+        BoxLayout:
+            orientation: 'horizontal'
+            spacing: 8
+            size_hint_y: None
+            height: '44dp'
+            Button:
+                text: 'x²'
+                on_press: root.square()
+                size_hint_x: 1
+                size_hint_y: None
+                height: '30dp'
+            Button:
+                text: "xʸ"
+                on_press: root.power()
+            Button:
+                text: "log10"
+                on_press: root.calculate_log10()
+            Button:
+                text: "ln"
+                on_press: root.calculate_ln()
+            Button:
+                text: "log₂"
+                on_press: root.calculate_log_base(2)
+            Button:
+                text: "log₃"
+                on_press: root.calculate_log_base(3)
+            Button:
+                text: "n!"
+                on_press: root.calculate_factorial()
+            Button:
+                text: 'sin'
+                on_press: root.calculate_sin()
+            Button:
+                text: 'cos'
+                on_press: root.calculate_cos()
+            Button:
+                text: 'tan'
+                on_press: root.calculate_tan()
+            Button:
+                text: 'n√x'
+                on_press: root.calc_symbol('√')
+            Button:
+                text: 'asin'
+                on_press: root.calculate_asin()
+            Button:
+                text: 'acos'
+                on_press: root.calculate_acos()
+            Button:
+                text: 'atan'
+                on_press: root.calculate_atan()
+            Button:
+                text: '1/x'
+                on_press: root.calculate_inverse()
+            Button:
+                text: "abs"
+                on_press: root.calculate_abs()
 
     # Optionally, add a Label for user guidance (uncomment if desired)
     # Label:
@@ -165,9 +256,15 @@
 
     # history area
     ScrollView:
-        size_hint_y: 0.2
+        size_hint_y: 0.18
         do_scroll_x: False
-
+        canvas.before:
+            Color:
+                rgba: 0.95, 0.98, 0.95, 1
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                radius: [8, 8, 8, 8]
         Label:
             id: history_label
             text_size: self.width, None
@@ -175,5 +272,6 @@
             height: self.texture_size[1]
             valign: 'top'
             halign: 'left'
-            font_size: 14
-            text: root.history_data  # <-- FIXED: bind to Python property
+            font_size: 15
+            color: 0.2, 0.2, 0.2, 1
+            text: root.history_data
