@@ -35,6 +35,7 @@ class CalculatorLayout(BoxLayout):
         Handles exponentiation mode, nth root, and normal evaluation.
         """
         expression = self.ids.calc_field.text
+        expression = expression.replace('x', '*')  # Remove spaces for easier parsing
 
         # Exponentiation mode
         if self.exponent_mode and "^" in expression:
