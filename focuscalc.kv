@@ -43,152 +43,151 @@
         size_hint_y: 0.62
         spacing: 8
 
-        # Main keypad area
+        # Calculator buttons with modern design
         BoxLayout:
-            orientation: 'horizontal'
-            spacing: 8
+            orientation: 'vertical'
+            size_hint_y: 0.58
+            spacing: 12
+            padding: [0, 0, 0, 0]
 
-            # Left column (C, ÷, ×)
-            BoxLayout:
-                orientation: 'vertical'
-                spacing: 8
-                size_hint_x: 0.18
+            # Main keypad area
+            GridLayout:
+                id: main_keypad
+                cols: 4
+                rows: 5
+                spacing: 10
+                padding: [5, 5, 5, 5]
+                row_force_default: True
+                row_default_height: '56dp'
+                col_force_default: True
+                col_default_width: '56dp'
+
+                # Row 1: C, ⌫, %, ÷
                 Button:
                     text: 'C'
-                    background_color: 1, 0.7, 0.7, 1
-                    color: 0.7, 0.1, 0.1, 1
                     font_size: 22
+                    background_color: 1, 0.5, 0.5, 1
+                    color: 1, 1, 1, 1
                     on_press: root.clear()
                 Button:
-                    text: '/'
-                    background_color: 0.8, 0.85, 1, 1
-                    color: 0.1, 0.2, 0.5, 1
+                    text: '⌫'
                     font_size: 22
-                    on_press: root.calc_symbol('/')
+                    background_color: 1, 0.7, 0.7, 1
+                    color: 0.7, 0.1, 0.1, 1
+                    on_press: root.backspace()
                 Button:
-                    text: 'x'
-                    background_color: 0.8, 0.85, 1, 1
-                    color: 0.1, 0.2, 0.5, 1
+                    text: '%'
                     font_size: 22
-                    on_press: root.calc_symbol('x')
+                    background_color: 0.7, 0.9, 1, 1
+                    color: 0.1, 0.4, 0.7, 1
+                    on_press: root.percentage()
+                Button:
+                    text: '÷'
+                    font_size: 26
+                    background_color: 0.5, 0.6, 0.9, 1
+                    color: 1, 1, 1, 1
+                    on_press: root.calc_symbol('/')
 
-            # Center 3x3 number grid
-            GridLayout:
-                cols: 3
-                rows: 3
-                spacing: 8
-                size_hint_x: 0.64
+                # Row 2: 7, 8, 9, ×
                 Button:
                     text: '7'
+                    font_size: 22
                     background_color: 0.93, 0.93, 0.98, 1
                     color: 0.15, 0.15, 0.25, 1
-                    font_size: 22
                     on_press: root.calc_symbol('7')
                 Button:
                     text: '8'
+                    font_size: 22
                     background_color: 0.93, 0.93, 0.98, 1
                     color: 0.15, 0.15, 0.25, 1
-                    font_size: 22
                     on_press: root.calc_symbol('8')
                 Button:
                     text: '9'
+                    font_size: 22
                     background_color: 0.93, 0.93, 0.98, 1
                     color: 0.15, 0.15, 0.25, 1
-                    font_size: 22
                     on_press: root.calc_symbol('9')
                 Button:
+                    text: '×'
+                    font_size: 26
+                    background_color: 0.5, 0.6, 0.9, 1
+                    color: 1, 1, 1, 1
+                    on_press: root.calc_symbol('x')
+
+                # Row 3: 4, 5, 6, −
+                Button:
                     text: '4'
+                    font_size: 22
                     background_color: 0.93, 0.93, 0.98, 1
                     color: 0.15, 0.15, 0.25, 1
-                    font_size: 22
                     on_press: root.calc_symbol('4')
                 Button:
                     text: '5'
+                    font_size: 22
                     background_color: 0.93, 0.93, 0.98, 1
                     color: 0.15, 0.15, 0.25, 1
-                    font_size: 22
                     on_press: root.calc_symbol('5')
                 Button:
                     text: '6'
+                    font_size: 22
                     background_color: 0.93, 0.93, 0.98, 1
                     color: 0.15, 0.15, 0.25, 1
-                    font_size: 22
                     on_press: root.calc_symbol('6')
                 Button:
+                    text: '−'
+                    font_size: 26
+                    background_color: 0.5, 0.6, 0.9, 1
+                    color: 1, 1, 1, 1
+                    on_press: root.calc_symbol('-')
+
+                # Row 4: 1, 2, 3, +
+                Button:
                     text: '1'
+                    font_size: 22
                     background_color: 0.93, 0.93, 0.98, 1
                     color: 0.15, 0.15, 0.25, 1
-                    font_size: 22
                     on_press: root.calc_symbol('1')
                 Button:
                     text: '2'
+                    font_size: 22
                     background_color: 0.93, 0.93, 0.98, 1
                     color: 0.15, 0.15, 0.25, 1
-                    font_size: 22
                     on_press: root.calc_symbol('2')
                 Button:
                     text: '3'
+                    font_size: 22
                     background_color: 0.93, 0.93, 0.98, 1
                     color: 0.15, 0.15, 0.25, 1
-                    font_size: 22
                     on_press: root.calc_symbol('3')
-
-            # Right column (⌫, −, +, =)
-            BoxLayout:
-                orientation: 'vertical'
-                spacing: 8
-                size_hint_x: 0.18
-                Button:
-                    text: '⌫'
-                    background_color: 1, 0.7, 0.7, 1
-                    color: 0.7, 0.1, 0.1, 1
-                    font_size: 22
-                    on_press: root.backspace()
-                Button:
-                    text: '-'
-                    background_color: 0.8, 0.85, 1, 1
-                    color: 0.1, 0.2, 0.5, 1
-                    font_size: 22
-                    on_press: root.calc_symbol('-')
                 Button:
                     text: '+'
-                    background_color: 0.8, 0.85, 1, 1
-                    color: 0.1, 0.2, 0.5, 1
-                    font_size: 22
+                    font_size: 26
+                    background_color: 0.5, 0.6, 0.9, 1
+                    color: 1, 1, 1, 1
                     on_press: root.calc_symbol('+')
+
+                # Row 5: 0, ., = (spans 2 columns)
+                Button:
+                    text: '0'
+                    font_size: 22
+                    background_color: 0.93, 0.93, 0.98, 1
+                    color: 0.15, 0.15, 0.25, 1
+                    on_press: root.calc_symbol('0')
+                    size_hint_x: 2  # Span two columns for 0
+                Button:
+                    text: '.'
+                    font_size: 22
+                    background_color: 0.93, 0.93, 0.98, 1
+                    color: 0.15, 0.15, 0.25, 1
+                    on_press: root.calc_symbol('.')
                 Button:
                     text: '='
+                    font_size: 26
                     background_color: 0.3, 0.7, 1, 1
                     color: 1, 1, 1, 1
-                    font_size: 24
                     on_press: root.get_result()
 
-        # Bottom row for 0, ., %
-        BoxLayout:
-            orientation: 'horizontal'
-            spacing: 8
-            size_hint_y: None
-            height: '44dp'
-            Button:
-                text: '%'
-                background_color: 0.9, 1, 0.9, 1
-                color: 0.1, 0.4, 0.1, 1
-                font_size: 22
-                on_press: root.percentage()
-            Button:
-                text: '0'
-                background_color: 0.93, 0.93, 0.98, 1
-                color: 0.15, 0.15, 0.25, 1
-                font_size: 22
-                on_press: root.calc_symbol('0')
-            Button:
-                text: '.'
-                background_color: 0.93, 0.93, 0.98, 1
-                color: 0.15, 0.15, 0.25, 1
-                font_size: 22
-                on_press: root.calc_symbol('.')
-
-        # Scientific and advanced buttons (optional, adjust as needed)
+        # Bottom row for scientific and advanced buttons (optional, adjust as needed)
         BoxLayout:
             orientation: 'horizontal'
             spacing: 8

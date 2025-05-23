@@ -9,6 +9,7 @@ from operations.math_utils import nth_root
 
 class CalculatorLayout(BoxLayout):
     history_data = StringProperty("")  # Kivy property for history data
+    is_scientific_mode = False  # Property to track calculator mode
 
     """
     Main calculator layout and logic.
@@ -21,6 +22,20 @@ class CalculatorLayout(BoxLayout):
         self.history_data = ""  # Initialize history data
         self.root_degree = None  # <-- Add this line to initialize root_degree
         self.just_calculated = False  # <-- Track if last action was calculation
+        # Initialize in standard mode
+        self.is_scientific_mode = False
+
+    def toggle_calculator_mode(self):
+        """Toggle between standard and scientific calculator modes"""
+        self.is_scientific_mode = not self.is_scientific_mode
+        # Update UI elements based on mode
+        if hasattr(self.ids, 'scientific_panel'):
+            self.ids.scientific_panel.opacity = 1 if self.is_scientific_mode else 0
+            self.ids.scientific_panel.disabled = not self.is_scientific_mode
+            self.ids.scientific_panel.height = self.ids.scientific_panel.minimum_height if self.is_scientific_mode else 0
+        # Update toggle button text
+        if hasattr(self.ids, 'mode_toggle_btn'):
+            self.ids.mode_toggle_btn.text = "Standard Mode" if self.is_scientific_mode else "Scientific Mode"
 
     def calc_symbol(self, symbol):
         """Append a symbol to the calculator field, with auto-reset after calculation."""
