@@ -20,9 +20,14 @@ class CalculatorLayout(BoxLayout):
         self.exponent_base = ""
         self.history_data = ""  # Initialize history data
         self.root_degree = None  # <-- Add this line to initialize root_degree
+        self.just_calculated = False  # <-- Track if last action was calculation
 
     def calc_symbol(self, symbol):
-        """Append a symbol to the calculator field."""
+        """Append a symbol to the calculator field, with auto-reset after calculation."""
+        # If last action was calculation and user enters a number or dot, reset field
+        if self.just_calculated and (symbol.isdigit() or symbol == '.'):
+            self.ids.calc_field.text = ""
+        self.just_calculated = False
         self.ids.calc_field.text += symbol
 
     def backspace(self):
@@ -73,6 +78,7 @@ class CalculatorLayout(BoxLayout):
             self.history_manager.add_entry(f"{expression} = {result}")
         except Exception:
             self.ids.calc_field.text = "Error"
+        self.just_calculated = True  # <-- Set flag after calculation
         self.update_history_display()
 
     def square(self):
