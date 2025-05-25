@@ -2,7 +2,7 @@ import math
 import re
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
-from kivy.properties import StringProperty
+from kivy.properties import StringProperty, BooleanProperty
 from operations.advanced import nth_root, square, square_root, percentage, exponentiate, log_base, log10, ln
 from operations.history import HistoryManager
 from operations.math_utils import nth_root
@@ -10,6 +10,7 @@ from operations.math_utils import nth_root
 class CalculatorLayout(BoxLayout):
     history_data = StringProperty("")  # Kivy property for history data
     is_scientific_mode = False  # Property to track calculator mode
+    how_history = BooleanProperty(False)
 
     """
     Main calculator layout and logic.

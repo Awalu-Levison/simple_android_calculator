@@ -1,9 +1,9 @@
 <CalculatorLayout>:
     orientation: 'vertical'
-    spacing: 16
-    padding: [20, 20, 20, 10]
+    spacing: 12
+    padding: [12, 12, 12, 12]
 
-    # Display area
+    # Display area (always visible)
     BoxLayout:
         size_hint_y: 0.18
         padding: [0, 0, 0, 8]
@@ -37,213 +37,295 @@
         valign: 'middle'
         text_size: self.width, None
 
-    # Buttons area
-    BoxLayout:
-        orientation: 'vertical'
-        size_hint_y: 0.62
+    # Mode toggle button (always visible)
+    Button:
+        id: mode_toggle_btn
+        text: "Standard Mode" if root.is_scientific_mode else "Scientific Mode"
+        size_hint_y: None
+        height: '40dp'
+        on_press: root.toggle_calculator_mode()
+
+    # Scientific mode grid (visible only in scientific mode)
+    GridLayout:
+        id: scientific_grid
+        cols: 5
         spacing: 8
+        size_hint_y: 0.62 if root.is_scientific_mode else 0  # Only visible in scientific mode
+        opacity: 1 if root.is_scientific_mode else 0
+        disabled: not root.is_scientific_mode
 
-        # Calculator buttons with modern design
-        BoxLayout:
-            orientation: 'vertical'
-            size_hint_y: 0.58
-            spacing: 12
-            padding: [0, 0, 0, 0]
+        # Row 1
+        Button:
+            text: '('
+            background_color: 0.15, 0.15, 0.15, 1
+            color: 1, 1, 1, 1
+        Button:
+            text: ')'
+            background_color: 0.15, 0.15, 0.15, 1
+            color: 1, 1, 1, 1
+        Button:
+            text: 'mc'
+            background_color: 0.15, 0.15, 0.15, 1
+            color: 1, 1, 1, 1
+        Button:
+            text: 'm+'
+            background_color: 0.15, 0.15, 0.15, 1
+            color: 1, 1, 1, 1
+        Button:
+            text: 'm-'
+            background_color: 0.15, 0.15, 0.15, 1
+            color: 1, 1, 1, 1
 
-            # Main keypad area
-            GridLayout:
-                id: main_keypad
-                cols: 4
-                rows: 5
-                spacing: 10
-                padding: [5, 5, 5, 5]
-                row_force_default: True
-                row_default_height: '56dp'
-                col_force_default: True
-                col_default_width: '56dp'
+        # Row 2
+        Button:
+            text: '2ˣ'
+            background_color: 0.15, 0.15, 0.15, 1
+            color: 1, 1, 1, 1
+        Button:
+            text: 'x³'
+            background_color: 0.15, 0.15, 0.15, 1
+            color: 1, 1, 1, 1
+        Button:
+            text: 'xʸ'
+            background_color: 0.15, 0.15, 0.15, 1
+            color: 1, 1, 1, 1
+        Button:
+            text: '10ˣ'
+            background_color: 0.15, 0.15, 0.15, 1
+            color: 1, 1, 1, 1
+        Button:
+            text: 'x²'
+            background_color: 0.15, 0.15, 0.15, 1
+            color: 1, 1, 1, 1
 
-                # Row 1: C, ⌫, %, ÷
-                Button:
-                    text: 'C'
-                    font_size: 22
-                    background_color: 1, 0.5, 0.5, 1
-                    color: 1, 1, 1, 1
-                    on_press: root.clear()
-                Button:
-                    text: '⌫'
-                    font_size: 22
-                    background_color: 1, 0.7, 0.7, 1
-                    color: 0.7, 0.1, 0.1, 1
-                    on_press: root.backspace()
-                Button:
-                    text: '%'
-                    font_size: 22
-                    background_color: 0.7, 0.9, 1, 1
-                    color: 0.1, 0.4, 0.7, 1
-                    on_press: root.percentage()
-                Button:
-                    text: '÷'
-                    font_size: 26
-                    background_color: 0.5, 0.6, 0.9, 1
-                    color: 1, 1, 1, 1
-                    on_press: root.calc_symbol('/')
+        # Row 3: standard calculator buttons
+        Button:
+            text: 'AC'
+            background_color: 0.3, 0.3, 0.3, 1
+            color: 1, 1, 1, 1
+        Button:
+            text: '±'
+            background_color: 0.3, 0.3, 0.3, 1
+            color: 1, 1, 1, 1
+        Button:
+            text: '%'
+            background_color: 0.3, 0.3, 0.3, 1
+            color: 1, 1, 1, 1
+        Button:
+            text: '÷'
+            background_color: 1, 0.7, 0, 1
+            color: 1, 1, 1, 1
 
-                # Row 2: 7, 8, 9, ×
-                Button:
-                    text: '7'
-                    font_size: 22
-                    background_color: 0.93, 0.93, 0.98, 1
-                    color: 0.15, 0.15, 0.25, 1
-                    on_press: root.calc_symbol('7')
-                Button:
-                    text: '8'
-                    font_size: 22
-                    background_color: 0.93, 0.93, 0.98, 1
-                    color: 0.15, 0.15, 0.25, 1
-                    on_press: root.calc_symbol('8')
-                Button:
-                    text: '9'
-                    font_size: 22
-                    background_color: 0.93, 0.93, 0.98, 1
-                    color: 0.15, 0.15, 0.25, 1
-                    on_press: root.calc_symbol('9')
-                Button:
-                    text: '×'
-                    font_size: 26
-                    background_color: 0.5, 0.6, 0.9, 1
-                    color: 1, 1, 1, 1
-                    on_press: root.calc_symbol('x')
+        # Row 4: digits and basic operators
+        Button:
+            text: '7'
+            background_color: 0.2, 0.2, 0.2, 1
+            color: 1, 1, 1, 1
+        Button:
+            text: '8'
+            background_color: 0.2, 0.2, 0.2, 1
+            color: 1, 1, 1, 1
+        Button:
+            text: '9'
+            background_color: 0.2, 0.2, 0.2, 1
+            color: 1, 1, 1, 1
+        Button:
+            text: '×'
+            background_color: 1, 0.7, 0, 1
+            color: 1, 1, 1, 1
 
-                # Row 3: 4, 5, 6, −
-                Button:
-                    text: '4'
-                    font_size: 22
-                    background_color: 0.93, 0.93, 0.98, 1
-                    color: 0.15, 0.15, 0.25, 1
-                    on_press: root.calc_symbol('4')
-                Button:
-                    text: '5'
-                    font_size: 22
-                    background_color: 0.93, 0.93, 0.98, 1
-                    color: 0.15, 0.15, 0.25, 1
-                    on_press: root.calc_symbol('5')
-                Button:
-                    text: '6'
-                    font_size: 22
-                    background_color: 0.93, 0.93, 0.98, 1
-                    color: 0.15, 0.15, 0.25, 1
-                    on_press: root.calc_symbol('6')
-                Button:
-                    text: '−'
-                    font_size: 26
-                    background_color: 0.5, 0.6, 0.9, 1
-                    color: 1, 1, 1, 1
-                    on_press: root.calc_symbol('-')
+        # Row 5: more digits and operators
+        Button:
+            text: '4'
+            background_color: 0.2, 0.2, 0.2, 1
+            color: 1, 1, 1, 1
+        Button:
+            text: '5'
+            background_color: 0.2, 0.2, 0.2, 1
+            color: 1, 1, 1, 1
+        Button:
+            text: '6'
+            background_color: 0.2, 0.2, 0.2, 1
+            color: 1, 1, 1, 1
+        Button:
+            text: '−'
+            background_color: 1, 0.7, 0, 1
+            color: 1, 1, 1, 1
 
-                # Row 4: 1, 2, 3, +
-                Button:
-                    text: '1'
-                    font_size: 22
-                    background_color: 0.93, 0.93, 0.98, 1
-                    color: 0.15, 0.15, 0.25, 1
-                    on_press: root.calc_symbol('1')
-                Button:
-                    text: '2'
-                    font_size: 22
-                    background_color: 0.93, 0.93, 0.98, 1
-                    color: 0.15, 0.15, 0.25, 1
-                    on_press: root.calc_symbol('2')
-                Button:
-                    text: '3'
-                    font_size: 22
-                    background_color: 0.93, 0.93, 0.98, 1
-                    color: 0.15, 0.15, 0.25, 1
-                    on_press: root.calc_symbol('3')
-                Button:
-                    text: '+'
-                    font_size: 26
-                    background_color: 0.5, 0.6, 0.9, 1
-                    color: 1, 1, 1, 1
-                    on_press: root.calc_symbol('+')
+        # Row 6: final set of digits and the equals button
+        Button:
+            text: '1'
+            background_color: 0.2, 0.2, 0.2, 1
+            color: 1, 1, 1, 1
+        Button:
+            text: '2'
+            background_color: 0.2, 0.2, 0.2, 1
+            color: 1, 1, 1, 1
+        Button:
+            text: '3'
+            background_color: 0.2, 0.2, 0.2, 1
+            color: 1, 1, 1, 1
+        Button:
+            text: '+'
+            background_color: 1, 0.7, 0, 1
+            color: 1, 1, 1, 1
 
-                # Row 5: 0, ., = (spans 2 columns)
-                Button:
-                    text: '0'
-                    font_size: 22
-                    background_color: 0.93, 0.93, 0.98, 1
-                    color: 0.15, 0.15, 0.25, 1
-                    on_press: root.calc_symbol('0')
-                    size_hint_x: 2  # Span two columns for 0
-                Button:
-                    text: '.'
-                    font_size: 22
-                    background_color: 0.93, 0.93, 0.98, 1
-                    color: 0.15, 0.15, 0.25, 1
-                    on_press: root.calc_symbol('.')
-                Button:
-                    text: '='
-                    font_size: 26
-                    background_color: 0.3, 0.7, 1, 1
-                    color: 1, 1, 1, 1
-                    on_press: root.get_result()
+        # Last row: 0, ., =, +, etc.
+        Button:
+            text: '0'
+            background_color: 0.2, 0.2, 0.2, 1
+            color: 1, 1, 1, 1
+        Button:
+            text: '.'
+            background_color: 0.2, 0.2, 0.2, 1
+            color: 1, 1, 1, 1
+        Button:
+            text: '='
+            background_color: 1, 0.7, 0, 1
+            color: 1, 1, 1, 1
+        Button:
+            text: '+'
+            background_color: 1, 0.7, 0, 1
+            color: 1, 1, 1, 1
 
-        # Bottom row for scientific and advanced buttons (optional, adjust as needed)
-        BoxLayout:
-            orientation: 'horizontal'
-            spacing: 8
-            size_hint_y: None
-            height: '44dp'
-            Button:
-                text: 'x²'
-                on_press: root.square()
-                size_hint_x: 1
-                size_hint_y: None
-                height: '30dp'
-            Button:
-                text: "xʸ"
-                on_press: root.power()
-            Button:
-                text: "log10"
-                on_press: root.calculate_log10()
-            Button:
-                text: "ln"
-                on_press: root.calculate_ln()
-            Button:
-                text: "log₂"
-                on_press: root.calculate_log_base(2)
-            Button:
-                text: "log₃"
-                on_press: root.calculate_log_base(3)
-            Button:
-                text: "n!"
-                on_press: root.calculate_factorial()
-            Button:
-                text: 'sin'
-                on_press: root.calculate_sin()
-            Button:
-                text: 'cos'
-                on_press: root.calculate_cos()
-            Button:
-                text: 'tan'
-                on_press: root.calculate_tan()
-            Button:
-                text: 'n√x'
-                on_press: root.calc_symbol('√')
-            Button:
-                text: 'asin'
-                on_press: root.calculate_asin()
-            Button:
-                text: 'acos'
-                on_press: root.calculate_acos()
-            Button:
-                text: 'atan'
-                on_press: root.calculate_atan()
-            Button:
-                text: '1/x'
-                on_press: root.calculate_inverse()
-            Button:
-                text: "abs"
-                on_press: root.calculate_abs()
+    # Standard mode grid (visible only in standard mode)
+    GridLayout:
+        id: standard_grid
+        cols: 4
+        spacing: 10
+        size_hint_y: 0.62 if not root.is_scientific_mode else 0  # Only visible in standard mode
+        opacity: 1 if not root.is_scientific_mode else 0
+        disabled: root.is_scientific_mode
+
+        # Row 1
+        Button:
+            text: 'AC'
+            font_size: 22
+            background_color: 0.3, 0.3, 0.3, 1
+            color: 1, 1, 1, 1
+            on_press: root.clear()
+        Button:
+            text: '÷'
+            font_size: 26
+            background_color: 1, 0.7, 0, 1
+            color: 1, 1, 1, 1
+            on_press: root.calc_symbol('/')
+        Button:
+            text: '%'
+            font_size: 22
+            background_color: 0.3, 0.3, 0.3, 1
+            color: 1, 1, 1, 1
+            on_press: root.percentage()
+        Button:
+            text: '÷'
+            font_size: 26
+            background_color: 1, 0.7, 0, 1
+            color: 1, 1, 1, 1
+            on_press: root.calc_symbol('/')
+
+        # Row 2
+        Button:
+            text: '7'
+            font_size: 22
+            background_color: 0.18, 0.18, 0.18, 1
+            color: 1, 1, 1, 1
+            on_press: root.calc_symbol('7')
+        Button:
+            text: '8'
+            font_size: 22
+            background_color: 0.18, 0.18, 0.18, 1
+            color: 1, 1, 1, 1
+            on_press: root.calc_symbol('8')
+        Button:
+            text: '9'
+            font_size: 22
+            background_color: 0.18, 0.18, 0.18, 1
+            color: 1, 1, 1, 1
+            on_press: root.calc_symbol('9')
+        Button:
+            text: '×'
+            font_size: 26
+            background_color: 1, 0.7, 0, 1
+            color: 1, 1, 1, 1
+            on_press: root.calc_symbol('x')
+
+        # Row 3
+        Button:
+            text: '4'
+            font_size: 22
+            background_color: 0.18, 0.18, 0.18, 1
+            color: 1, 1, 1, 1
+            on_press: root.calc_symbol('4')
+        Button:
+            text: '5'
+            font_size: 22
+            background_color: 0.18, 0.18, 0.18, 1
+            color: 1, 1, 1, 1
+            on_press: root.calc_symbol('5')
+        Button:
+            text: '6'
+            font_size: 22
+            background_color: 0.18, 0.18, 0.18, 1
+            color: 1, 1, 1, 1
+            on_press: root.calc_symbol('6')
+        Button:
+            text: '−'
+            font_size: 26
+            background_color: 1, 0.7, 0, 1
+            color: 1, 1, 1, 1
+            on_press: root.calc_symbol('-')
+
+        # Row 4
+        Button:
+            text: '1'
+            font_size: 22
+            background_color: 0.18, 0.18, 0.18, 1
+            color: 1, 1, 1, 1
+            on_press: root.calc_symbol('1')
+        Button:
+            text: '2'
+            font_size: 22
+            background_color: 0.18, 0.18, 0.18, 1
+            color: 1, 1, 1, 1
+            on_press: root.calc_symbol('2')
+        Button:
+            text: '3'
+            font_size: 22
+            background_color: 0.18, 0.18, 0.18, 1
+            color: 1, 1, 1, 1
+            on_press: root.calc_symbol('3')
+        Button:
+            text: '+'
+            font_size: 26
+            background_color: 1, 0.7, 0, 1
+            color: 1, 1, 1, 1
+            on_press: root.calc_symbol('+')
+
+        # Row 5
+        Button:
+            text: '⌫'
+            font_size: 22
+            background_color: 0.3, 0.3, 0.3, 1
+            color: 1, 1, 1, 1
+            on_press: root.backspace()
+        Button:
+            text: '0'
+            font_size: 22
+            background_color: 0.18, 0.18, 0.18, 1
+            color: 1, 1, 1, 1
+            on_press: root.calc_symbol('0')
+        Button:
+            text: '.'
+            font_size: 22
+            background_color: 0.18, 0.18, 0.18, 1
+            color: 1, 1, 1, 1
+            on_press: root.calc_symbol('.')
+        Button:
+            text: '='
+            font_size: 26
+            background_color: 1, 0.7, 0, 1
+            color: 1, 1, 1, 1
+            on_press: root.get_result()
 
     # Optionally, add a Label for user guidance (uncomment if desired)
     # Label:
@@ -254,23 +336,27 @@
     #     height: '20dp'
 
     # history area
-    ScrollView:
-        size_hint_y: 0.18
-        do_scroll_x: False
-        canvas.before:
-            Color:
-                rgba: 0.95, 0.98, 0.95, 1
-            RoundedRectangle:
-                pos: self.pos
-                size: self.size
-                radius: [8, 8, 8, 8]
-        Label:
-            id: history_label
-            text_size: self.width, None
-            size_hint_y: None
-            height: self.texture_size[1]
-            valign: 'top'
-            halign: 'left'
-            font_size: 15
-            color: 0.2, 0.2, 0.2, 1
-            text: root.history_data
+    BoxLayout:
+        id: history_box
+        size_hint_y: 0.18 if hasattr(root, 'show_history') and root.show_history else 0
+        opacity: 1 if hasattr(root, 'show_history') and root.show_history else 0
+        height: self.minimum_height if hasattr(root, 'show_history') and root.show_history else 0
+        ScrollView:
+            do_scroll_x: False
+            canvas.before:
+                Color:
+                    rgba: 0.95, 0.98, 0.95, 1
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [8, 8, 8, 8]
+            Label:
+                id: history_label
+                text_size: self.width, None
+                size_hint_y: None
+                height: self.texture_size[1]
+                valign: 'top'
+                halign: 'left'
+                font_size: 15
+                color: 0.2, 0.2, 0.2, 1
+                text: root.history_data
