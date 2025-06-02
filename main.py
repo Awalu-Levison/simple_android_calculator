@@ -9,7 +9,7 @@ from operations.math_utils import nth_root
 
 class CalculatorLayout(BoxLayout):
     history_data = StringProperty("")  # Kivy property for history data
-    is_scientific_mode = False  # Property to track calculator mode
+    is_scientific_mode = BooleanProperty(False)  # Property to track calculator mode
     how_history = BooleanProperty(False)
 
     """
